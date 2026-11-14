@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tendência da vegetação — Floresta</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+      html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #10140f; color: #f4efe6; }
+      #map { position: absolute; inset: 0; }
+      .panel {
+        position: absolute; z-index: 500; top: 12px; left: 12px; width: min(400px, calc(100% - 24px));
+        background: rgba(16, 20, 15, 0.92); border: 1px solid rgba(240, 195, 106, 0.45);
+        border-radius: 14px; padding: 16px; max-height: calc(100% - 24px); overflow: auto;
+      }
+      h1 { font-size: 1.05rem; margin: 0 0 6px; }
+      p, li { font-size: 0.78rem; line-height: 1.4; color: #e7d7c3; }
+      p { margin: 0 0 8px; }
+      ul { margin: 0 0 10px; padding-left: 18px; }
+      .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+      button {
+        font: inherit; font-size: 0.78rem; color: #f4efe6; background: transparent;
+        border: 1px solid rgba(240, 195, 106, 0.45); border-radius: 999px;
+        padding: 6px 10px; cursor: pointer;
+      }
+      button.on { background: #f0c36a; color: #1b1408; border-color: #f0c36a; }
+      .ramp { height: 12px; border-radius: 6px; margin-top: 4px;
+        background: linear-gradient(to right, rgb(176, 48, 36), rgb(196, 176, 130), rgb(46, 130, 58)); }
+      .ticks { display: flex; justify-content: space-between; font-size: 0.68rem; color: #cbbba6; margin-top: 3px; }
+      #rain strong { color: #f4efe6; font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <aside class="panel">
+      <h1>Tendência da vegetação</h1>
+      <p id="lead"></p>
+      <div class="row" id="sensors"></div>
+      <div class="row" id="steps"></div>
+      <div id="legend"></div>
+      <div id="rain"></div>
+      <ul id="facts"></ul>
+    </aside>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      const map = L.map("map", { zoomControl: false }).setView([-8.60, -38.52], 13);
+      L.control.zoom({ position: "bottomright" }).addTo(map);
+      L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        { maxZoom: 19, attribution: "Esri, Maxar · MODIS GIBS · NISAR GIBS" }
+      ).addTo(map);
+
+      const state = { sensor: "modis", step: "trend" };
+      const layers = {};
+      let current = null;
+
+      function show(name) {
+        if (current) map.removeLayer(current);
+        current = layers[name];
+        if (current) current.addTo(map);
+      }
+
+      function apply(stats) {
+        document.querySelectorAll("#sensors button, #steps button").forEach((button) => {
+          button.classList.toggle("on", button.dataset.id === state.sensor || button.dataset.id === state.step);
+        });
+        const trend = state.step === "trend";
+        show(trend ? state.sensor + "-trend" : state.sensor + "-" + state.step);
+        const unit = state.sensor === "modis"
+          ? "queda por ano · setembro 2016–2026 · alta por ano"
+          : "queda na série · jun–out 2026 · alta na série";
+        document.getElementById("legend").innerHTML = trend
+          ? '<div class="ramp"></div><div class="ticks"><span>' + unit.split(" · ")[0] + "</span><span>" + unit.split(" · ")[1] + "</span><span>" + unit.split(" · ")[2] + "</span></div>"
+          : "";
+      }
+
+      fetch("degradation/stats.json?v=6").then((response) => response.json()).then((stats) => {
+        const bounds = [[stats.south, stats.west], [stats.north, stats.east]];
+        L.rectangle(bounds, { color: "#fff4d6", weight: 2, fill: false }).addTo(map);
+        fetch("degradation/municipality.geojson").then((response) => response.json()).then((geo) => {
+          L.geoJSON(geo, { style: { color: "#ffffff", weight: 1.5, fill: false } }).addTo(map);
+        });
+        map.fitBounds(bounds, { padding: [48, 48], maxZoom: 14 });
+        ["modis-trend", "nisar-trend"].forEach((name) => {
+          layers[name] = L.imageOverlay("degradation/" + name + ".png?v=6", bounds, { opacity: 0.88 });
+        });
+        stats.modis_years.forEach((year) => {
+          layers["modis-" + year] = L.imageOverlay("degradation/modis-" + year + ".png?v=6", bounds, { opacity: 0.88 });
+        });
+        stats.nisar_dates.forEach((day) => {
+          layers["nisar-" + day] = L.imageOverlay("degradation/nisar-" + day + ".png?v=6", bounds, { opacity: 0.88 });
+        });
+
+        const sensors = document.getElementById("sensors");
+        [["modis", "MODIS"], ["nisar", "NISAR"]].forEach(([id, label]) => {
+          const button = document.createElement("button");
+          button.textContent = label;
+          button.dataset.id = id;
+          button.onclick = () => { state.sensor = id; state.step = "trend"; buildSteps(stats); apply(stats); };
+          sensors.appendChild(button);
+        });
+
+        function buildSteps() {
+          const box = document.getElementById("steps");
+          box.innerHTML = "";
+          const trend = document.createElement("button");
+          trend.textContent = "Tendência";
+          trend.dataset.id = "trend";
+          trend.onclick = () => { state.step = "trend"; apply(stats); };
+          box.appendChild(trend);
+          const items = state.sensor === "modis" ? stats.modis_years : stats.nisar_dates;
+          items.forEach((item) => {
+            const button = document.createElement("button");
+            button.textContent = state.sensor === "modis" ? item : String(item).slice(5);
+            button.dataset.id = String(item);
+            button.onclick = () => { state.step = String(item); apply(stats); };
+            box.appendChild(button);
+          });
+        }
+
+        const rain = stats.rain;
+        const september = Object.keys(rain.september_center)
+          .map((year) => year + " " + String(rain.september_center[year]).replace(".", ",") + " mm")
+          .join(" · ");
+        const months = Object.keys(rain.nisar_months)
+          .map((key) => key.slice(4) + "/" + key.slice(0, 4) + " " + String(rain.nisar_months[key]).replace(".", ",") + " mm")
+          .join(" · ");
+        const means = stats.nisar_dates
+          .map((day) => day.slice(5) + " " + stats.nisar_means[day])
+          .join(" · ");
+        document.getElementById("lead").textContent =
+          stats.place + ". Caixa de cerca de 13 km. O MODIS é a tendência de todos os setembros, de 2016 a 2026. O NISAR não tem anos anteriores: são seis passagens da mesma órbita e da mesma polarização, de 25 jun a 23 out 2026.";
+        document.getElementById("rain").innerHTML =
+          "<p><strong>Chuva, NASA POWER.</strong> Setembro no centro da caixa: " + september + ".</p>" +
+          "<p>De 25 jun a 23 out, soma diária. Junho e outubro não são o mês inteiro: " + months + ".</p>";
+        document.getElementById("facts").innerHTML =
+          "<li>MODIS: a inclinação média é " + stats.modis_slope_per_year +
+          " por ano na escala de cor. " + stats.modis_falling_pct +
+          "% dos pixels caem mais de 0,3 por ano. Pixel de cerca de " + stats.modis_pixel_m + " m.</li>" +
+          "<li>NISAR, prévia HV: " + means +
+          ". Inclinação média " + stats.nisar_slope_per_day +
+          " por dia. São quatro meses, e cada imagem tem a própria escala. Pixel de cerca de " + stats.nisar_pixel_m + " m.</li>";
+        buildSteps();
+        apply(stats);
+      });
+    </script>
+  </body>
+</html>

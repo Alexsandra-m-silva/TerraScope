@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Six municipalities — desertification check</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+      html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #10140f; color: #f6efe4; }
+      #map { position: absolute; inset: 0; }
+      .panel {
+        position: absolute; z-index: 500; top: 12px; left: 12px; width: min(320px, calc(100% - 24px));
+        max-height: calc(100% - 24px); overflow: auto;
+        background: rgba(16, 20, 15, 0.92); border: 1px solid rgba(220, 64, 48, 0.7);
+        border-radius: 14px; padding: 16px;
+      }
+      h1 { font-size: 1.05rem; margin: 0 0 4px; }
+      .where { font-size: 0.75rem; color: #c8b49a; margin: 0 0 10px; }
+      p { font-size: 0.8rem; line-height: 1.4; color: #e7d7c3; margin: 0 0 10px; }
+      button {
+        display: block; width: 100%; text-align: left; margin: 0 0 6px; padding: 7px 8px;
+        background: transparent; color: #f6efe4; border: 1px solid rgba(220, 64, 48, 0.45);
+        border-radius: 8px; cursor: pointer; font: inherit; font-size: 0.78rem;
+      }
+      button.active, button:hover { background: rgba(220, 64, 48, 0.25); }
+      button.muni { border-color: rgba(240, 214, 160, 0.7); }
+      h2 { font-size: 0.78rem; margin: 12px 0 6px; color: #f0d6a0; font-weight: 600; }
+      table { width: 100%; border-collapse: collapse; font-size: 0.7rem; margin: 0 0 8px; }
+      th, td { text-align: left; padding: 3px 2px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+      #watch p { margin-bottom: 6px; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <aside class="panel">
+      <h1>Six municipalities</h1>
+      <p class="where">Cabrobó desertification nucleus, Pernambuco</p>
+      <p>The rose area is the Cabrobó nucleus: Belém de São Francisco, Cabrobó, Carnaubeira da Penha, Floresta, and Itacuruba. That is the desertification area studies still use, including a 2023 land-use study and a 2024 vulnerability study. The 1992 world atlas is not shown. The six municipalities around Petrolina sit outside this nucleus. Red squares are our ten-year decline where the 2026 NISAR pass also sees a loss.</p>
+      <h2>NISAR, 17 Sep to 11 Oct 2026</h2>
+      <div id="watch"></div>
+      <h2>Municipalities</h2>
+      <div id="munis"></div>
+      <h2>Red squares</h2>
+      <div id="sites"></div>
+    </aside>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      fetch("desert/desertwatch.json").then((r) => r.json()).then((w) => {
+        const line = (name, area) =>
+          `<tr><td>${name}</td><td>${area.before.hv}</td><td>${area.after.hv}</td><td>${area.delta_hv}</td><td>${area.before.ratio} → ${area.after.ratio}</td></tr>`;
+        document.getElementById("watch").innerHTML =
+          `<p>Public GCOV browse, not γ⁰ in dB. The green channel stands in for HV and the red channel for co-pol.</p>` +
+          `<table><tr><th></th><th>HV 17 Sep</th><th>HV 11 Oct</th><th>Change</th><th>HV/HH</th></tr>` +
+          line("Cabrobó nucleus", w.nucleus) +
+          line("Dormentes, outside", w.control) +
+          `</table>`;
+      });
+
+      const map = L.map("map", { zoomControl: false }).setView([-9.3, -40.5], 12);
+      L.control.zoom({ position: "bottomright" }).addTo(map);
+      L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        { maxZoom: 19, attribution: "Esri, Maxar, Earthstar Geographics" }
+      ).addTo(map);
+
+      const layers = {};
+      const muniLayers = {};
+      Promise.all([
+        fetch("desert/nucleus.geojson").then((r) => r.json()),
+        fetch("desert/municipalities.geojson").then((r) => r.json()),
+        fetch("desert/red.geojson").then((r) => r.json()),
+      ]).then(([nucleus, munis, red]) => {
+        const nucleusGroup = L.geoJSON(nucleus, {
+          style: { color: "#c45c7a", weight: 2, fillColor: "#c45c7a", fillOpacity: 0.35 },
+          onEachFeature: (feature, layer) => {
+            layer.bindTooltip(`${feature.properties.name} · Cabrobó desertification nucleus`);
+          },
+        }).addTo(map);
+
+        const muniGroup = L.geoJSON(munis, {
+          style: { color: "#fff4d6", weight: 2, fillOpacity: 0 },
+          onEachFeature: (feature, layer) => {
+            const name = feature.properties.name;
+            muniLayers[name] = layer;
+            layer.bindTooltip(`${feature.properties.label} · ${feature.properties.inside}`);
+            layer.on("click", () => focusMuni(name));
+          },
+        }).addTo(map);
+
+        const box = document.getElementById("munis");
+        munis.features.forEach((feature) => {
+          const name = feature.properties.name;
+          const button = document.createElement("button");
+          button.className = "muni";
+          button.id = `muni-${name}`;
+          button.textContent = `${feature.properties.label} · ${feature.properties.inside}`;
+          button.onclick = () => focusMuni(name);
+          box.appendChild(button);
+        });
+
+        L.geoJSON(red, {
+          style: { color: "#ff5a45", weight: 2, fillColor: "#dc4030", fillOpacity: 0.45 },
+          onEachFeature: (feature, layer) => {
+            const id = feature.properties.id;
+            layers[id] = layer;
+            layer.bindTooltip(`Square ${id} · ${feature.properties.ha} ha`);
+            layer.on("click", () => focus(id));
+          },
+        }).addTo(map);
+
+        const sites = document.getElementById("sites");
+        red.features.forEach((feature) => {
+          const id = feature.properties.id;
+          const button = document.createElement("button");
+          button.id = `site-${id}`;
+          button.textContent = `Square ${id} · ${feature.properties.ha} ha`;
+          button.onclick = () => focus(id);
+          sites.appendChild(button);
+        });
+
+        const view = muniGroup.getBounds();
+        view.extend(nucleusGroup.getBounds());
+        map.fitBounds(view, { padding: [24, 24] });
+      });
+
+      function focusMuni(name) {
+        const layer = muniLayers[name];
+        if (!layer) return;
+        map.fitBounds(layer.getBounds(), { padding: [40, 40] });
+        layer.openTooltip();
+        document.querySelectorAll("#munis button").forEach((button) => button.classList.remove("active"));
+        const button = document.getElementById(`muni-${name}`);
+        if (button) button.classList.add("active");
+      }
+
+      function focus(id) {
+        const layer = layers[id];
+        if (!layer) return;
+        map.fitBounds(layer.getBounds(), { maxZoom: 16, padding: [80, 80] });
+        layer.openTooltip();
+        document.querySelectorAll("#sites button").forEach((button) => button.classList.remove("active"));
+        const button = document.getElementById(`site-${id}`);
+        if (button) button.classList.add("active");
+      }
+    </script>
+  </body>
+</html>

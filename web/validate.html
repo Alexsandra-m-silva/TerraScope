@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NISAR — caixa de validação</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+      html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #10140f; color: #f4efe6; }
+      #map { position: absolute; inset: 0; }
+      .panel {
+        position: absolute; z-index: 500; top: 12px; left: 12px; width: min(340px, calc(100% - 24px));
+        background: rgba(16, 20, 15, 0.92); border: 1px solid rgba(240, 195, 106, 0.45);
+        border-radius: 14px; padding: 16px;
+      }
+      h1 { font-size: 1.05rem; margin: 0 0 4px; }
+      p { font-size: 0.78rem; line-height: 1.4; color: #e7d7c3; margin: 0 0 8px; }
+      label { display: flex; gap: 8px; align-items: center; font-size: 0.8rem; margin: 0 0 6px; cursor: pointer; }
+      .legend { margin: 4px 0 10px 22px; }
+      .legend[hidden] { display: none; }
+      .ramp {
+        height: 12px; border-radius: 6px;
+        background: linear-gradient(to right,
+          rgb(210, 170, 90) 0%,
+          rgb(165, 150, 125) 25%,
+          rgb(120, 130, 160) 50%,
+          rgb(75, 110, 195) 75%,
+          rgb(30, 90, 230) 100%);
+      }
+      .ticks { display: flex; justify-content: space-between; font-size: 0.68rem; color: #cbbba6; margin-top: 3px; }
+      .legend p { margin: 4px 0 0; font-size: 0.7rem; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <aside class="panel">
+      <h1>Caixa de validação</h1>
+      <p>5 set 2026, perto de Petrolina. Órbita 168, quadro 093. A umidade é o SME2 lido do arquivo. Cada pixel tem cerca de 200 m. As outras camadas são as imagens públicas dos grânulos.</p>
+      <div id="toggles"></div>
+    </aside>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      const map = L.map("map", { zoomControl: false }).setView([-9.44, -40.5], 13);
+      L.control.zoom({ position: "bottomright" }).addTo(map);
+      L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        { maxZoom: 19, attribution: "Esri, Maxar · NISAR browse ASF" }
+      ).addTo(map);
+
+      fetch("validate/layers.json").then((r) => r.json()).then((meta) => {
+        const bounds = [[meta.south, meta.west], [meta.north, meta.east]];
+        L.rectangle(bounds, { color: "#fff4d6", weight: 2, fill: false }).addTo(map);
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
+        const box = document.getElementById("toggles");
+        const legend = document.createElement("div");
+        legend.className = "legend";
+        legend.innerHTML =
+          '<div class="ramp"></div>' +
+          '<div class="ticks"><span>0,00</span><span>0,10</span><span>0,20</span><span>0,30</span><span>0,40+</span></div>' +
+          '<p>m³ de água por m³ de solo. Neste retângulo: 0,04 a 0,49. A maior parte dos pixels fica entre 0,09 e 0,16. Acima de 0,40 a cor para no azul mais escuro. Onde o satélite não aparece, não houve leitura.</p>';
+        meta.layers.forEach((layer) => {
+          const overlay = L.imageOverlay("validate/" + layer.file, bounds, { opacity: 0.85 });
+          const label = document.createElement("label");
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.checked = layer.id === "SME2";
+          input.onchange = () => {
+            if (input.checked) overlay.addTo(map);
+            else map.removeLayer(overlay);
+            if (layer.id === "SME2") legend.hidden = !input.checked;
+          };
+          label.append(input, document.createTextNode(`${layer.id} — ${layer.label}`));
+          box.appendChild(label);
+          if (layer.id === "SME2") {
+            overlay.addTo(map);
+            box.appendChild(legend);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

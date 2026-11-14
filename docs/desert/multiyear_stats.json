@@ -1,0 +1,23 @@
+{
+  "place": "Caatinga near Petrolina, Pernambuco",
+  "ndvi": "MODIS Terra monthly NDVI, each September 2016\u20132025, GIBS fixed color scale",
+  "rain": "NASA POWER PRECTOTCORR, September total at Petrolina",
+  "september_rain_mm": {
+    "2016": 4.2,
+    "2017": 16.5,
+    "2018": 1.2,
+    "2019": 2.1,
+    "2020": 4.2,
+    "2021": 0.9,
+    "2022": 5.1,
+    "2023": 2.1,
+    "2024": 1.5,
+    "2025": 2.1
+  },
+  "nisar": "Loss patches from GCOV 5 Sep and 23 Oct 2026, track 168",
+  "decline_per_year": -0.008,
+  "decline_ha": 40157.0,
+  "confirmed_ha": 1746.0,
+  "pixel_m": 1206.0,
+  "reading": "Yellow: September vegetation rank fell for a decade after removing the rainfall term. Red: that decline also matches a 2026 NISAR loss patch."
+}

@@ -1,0 +1,39 @@
+{
+  "dates": [
+    "2026-09-17",
+    "2026-10-11"
+  ],
+  "product": "NISAR L2 GCOV browse on GIBS. Green is the HV display, red is co-pol. Not gamma0 in dB.",
+  "note": "Experimental browse proxy. A drop in the green channel is not vegetation loss by itself.",
+  "nucleus": {
+    "n": 2490,
+    "before": {
+      "hh": 77.3,
+      "hv": 116.7,
+      "ratio": 1.35
+    },
+    "after": {
+      "hh": 77.6,
+      "hv": 118.6,
+      "ratio": 1.4
+    },
+    "delta_hv": 1.8,
+    "drop_pct": 18.0
+  },
+  "control": {
+    "n": 1424,
+    "before": {
+      "hh": 34.1,
+      "hv": 55.2,
+      "ratio": 0.83
+    },
+    "after": {
+      "hh": 32.6,
+      "hv": 55.1,
+      "ratio": 0.89
+    },
+    "delta_hv": -0.1,
+    "drop_pct": 9.0
+  },
+  "control_name": "Dormentes, PE, outside the Cabrob\u00f3 nucleus"
+}

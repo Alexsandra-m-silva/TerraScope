@@ -1,0 +1,51 @@
+{
+  "place": "Uruguay River bank, Uruguaiana \u2014 human check box",
+  "before": "2026-09-30",
+  "after": "2026-10-12",
+  "bbox": [
+    -57.079983,
+    -29.757373,
+    -57.008572,
+    -29.700131
+  ],
+  "center": [
+    -29.72875,
+    -57.04428
+  ],
+  "zoom": 14,
+  "polygons": 7,
+  "new_inundation_ha": 176.0,
+  "polygon_ha": [
+    {
+      "id": 1,
+      "ha": 44.4
+    },
+    {
+      "id": 2,
+      "ha": 33.3
+    },
+    {
+      "id": 3,
+      "ha": 29.0
+    },
+    {
+      "id": 4,
+      "ha": 23.2
+    },
+    {
+      "id": 5,
+      "ha": 16.5
+    },
+    {
+      "id": 6,
+      "ha": 16.3
+    },
+    {
+      "id": 7,
+      "ha": 13.3
+    }
+  ],
+  "check": "Same yellow outline on both dates. On 30 Sep the number should sit on bright land. On 12 Oct it should sit on dark water. Reject a number that fails either test.",
+  "geometry": "Same descending track 010, frame 103, 12-day repeat",
+  "pixel_m": 16.59
+}

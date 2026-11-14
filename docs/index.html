@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Climate Guardian turns open NASA Earth observations into clear, traceable environmental signals."
+    />
+    <meta name="theme-color" content="#081715" />
+    <title>Climate Guardian — Earth signals, made clear</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/landing.css" />
+    <script type="module" src="assets/js/landing.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Climate Guardian home">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span class="brand-name">climate<span>guardian</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#approach">Our approach</a>
+        <a href="#signals">Explore signals</a>
+        <a href="#science">The science</a>
+      </nav>
+      <a class="header-link" href="flood.html">
+        Open the platform <span aria-hidden="true">↗</span>
+      </a>
+    </header>
+
+    <main id="top">
+      <section class="hero page-wrap" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="live-dot"></span> NASA SPACE APPS CHALLENGE · 2026</div>
+          <h1 id="hero-title">A changing planet.<br /><span>Seen more clearly.</span></h1>
+          <p class="hero-intro">
+            We turn open Earth-observation data into practical signals for the people protecting
+            land, water, and communities.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#signals">Explore the signals <span aria-hidden="true">↓</span></a>
+            <a class="button button-quiet" href="flood.html">Open flood monitor <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="hero-proof">
+            <span class="proof-icon" aria-hidden="true">◎</span>
+            <span><strong>Built with open NASA data</strong><br />NISAR · MODIS · GPM IMERG</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="visual-card">
+            <div class="visual-topline">
+              <span class="mono-label">FIELD NOTE / 001</span>
+              <span class="status-tag"><span></span> ANALYSIS PREVIEW</span>
+            </div>
+            <div class="visual-image">
+              <img src="scenes/change.png" alt="NISAR satellite image comparison of a river landscape before and after a flood observation" />
+              <div class="image-caption">
+                <span>URUGUAY RIVER · NISAR GCOV</span>
+                <span>30 SEP — 12 OCT 2026</span>
+              </div>
+            </div>
+            <div class="visual-reading">
+              <div>
+                <span class="reading-label">CANDIDATE CHANGE AREA</span>
+                <strong>176 <small>ha</small></strong>
+              </div>
+              <div class="reading-divider"></div>
+              <div>
+                <span class="reading-label">SITES TO REVIEW</span>
+                <strong>07 <small>signals</small></strong>
+              </div>
+              <span class="reading-arrow" aria-hidden="true">↗</span>
+            </div>
+            <p class="visual-footnote">Exploratory satellite analysis · human validation required</p>
+          </div>
+          <div class="orbit-label orbit-label-top">L-BAND / 15.6 M</div>
+          <div class="orbit-label orbit-label-bottom">EARTH OBSERVATION / OPEN DATA</div>
+        </div>
+        <a class="scroll-cue" href="#approach"><span></span> SCROLL TO EXPLORE</a>
+      </section>
+
+      <section class="approach-section" id="approach" aria-labelledby="approach-title">
+        <div class="page-wrap approach-grid">
+          <div>
+            <p class="section-kicker">01 / THE IDEA</p>
+            <h2 id="approach-title">From pixels in orbit<br />to signals on the ground.</h2>
+          </div>
+          <div class="approach-copy">
+            <p>
+              Satellites see patterns that are difficult to spot from the ground. Climate Guardian
+              brings those observations together, highlights where change may be happening, and
+              makes the evidence easier to inspect.
+            </p>
+            <div class="data-ribbon" aria-label="NASA data sources">
+              <span><i class="source-dot teal"></i>NISAR <small>surface change</small></span>
+              <span><i class="source-dot blue"></i>MODIS <small>long-term trends</small></span>
+              <span><i class="source-dot violet"></i>GPM IMERG <small>precipitation</small></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="signals-section page-wrap" id="signals" aria-labelledby="signals-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">02 / OBSERVATION DECK</p>
+            <h2 id="signals-title">One planet. Many signals.</h2>
+          </div>
+          <p class="section-aside">Select a case to explore the data behind each view.</p>
+        </div>
+
+        <div class="signal-tabs" role="group" aria-label="Choose an environmental signal">
+          <button class="signal-tab is-active" type="button" data-case="flood" aria-pressed="true">
+            <span>01</span> Flood change
+          </button>
+          <button class="signal-tab" type="button" data-case="vegetation" aria-pressed="false">
+            <span>02</span> Vegetation
+          </button>
+          <button class="signal-tab" type="button" data-case="drylands" aria-pressed="false">
+            <span>03</span> Drylands
+          </button>
+        </div>
+
+        <article class="signal-feature" aria-live="polite">
+          <div class="feature-image-wrap">
+            <img
+              id="case-image"
+              src="scenes/change.png"
+              alt="NISAR satellite comparison showing the Uruguay River area before and after observation"
+            />
+            <span class="image-index" id="case-index">SIGNAL 01 / 03</span>
+            <span class="image-source" id="case-source">NISAR · 12-DAY REPEAT</span>
+          </div>
+          <div class="feature-copy">
+            <p class="section-kicker" id="case-kicker">FLOOD CHANGE / URUGUAY RIVER</p>
+            <h3 id="case-title">Look closer when the river moves.</h3>
+            <p class="feature-description" id="case-description">
+              Compare repeat NISAR observations around Uruguaiana to flag candidate new-water
+              areas. A consistent orbit and paired dates make the change easier to inspect.
+            </p>
+            <div class="feature-stat">
+              <strong id="case-stat">176 <small>ha</small></strong>
+              <span id="case-stat-label">candidate inundation footprint<br />7 locations flagged for review</span>
+            </div>
+            <a class="text-link" id="case-link" href="flood.html">
+              Open flood monitor <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+        <p class="caveat">
+          These are exploratory analyses, not official alerts or verified ground conditions.
+          Methods, resolution, and uncertainty vary by data product.
+        </p>
+      </section>
+
+      <section class="science-section" id="science" aria-labelledby="science-title">
+        <div class="page-wrap science-grid">
+          <div class="science-copy">
+            <p class="section-kicker">03 / BUILT FOR TRUST</p>
+            <h2 id="science-title">Show the evidence.<br /><span>Respect its limits.</span></h2>
+            <p>
+              Every signal starts with an observable question. We pair NASA satellite products
+              with transparent comparisons, readable context, and a clear reminder that a model
+              is a starting point for investigation—not the final word.
+            </p>
+            <a class="button button-outline" href="flood.html">Inspect the NISAR case <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="science-list">
+            <div class="science-row">
+              <span class="science-number">01</span>
+              <div><h3>Observe</h3><p>Start from open satellite imagery and repeat observations.</p></div>
+              <span class="science-symbol" aria-hidden="true">⌁</span>
+            </div>
+            <div class="science-row">
+              <span class="science-number">02</span>
+              <div><h3>Compare</h3><p>Make dates, sensors, and visual differences easy to explore.</p></div>
+              <span class="science-symbol" aria-hidden="true">⇄</span>
+            </div>
+            <div class="science-row">
+              <span class="science-number">03</span>
+              <div><h3>Validate</h3><p>Keep uncertainty visible and invite human review.</p></div>
+              <span class="science-symbol" aria-hidden="true">◎</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer page-wrap">
+      <a class="brand footer-brand" href="#top">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span class="brand-name">climate<span>guardian</span></span>
+      </a>
+      <p>Earth observation for a more resilient future.</p>
+      <div class="footer-meta">
+        <span>NASA SPACE APPS CHALLENGE 2026</span>
+        <a href="https://www.earthdata.nasa.gov/" target="_blank" rel="noreferrer">NASA Earthdata ↗</a>
+      </div>
+      <p class="footer-note">Climate Guardian is an independent challenge project and is not affiliated with or endorsed by NASA.</p>
+    </footer>
+  </body>
+</html>

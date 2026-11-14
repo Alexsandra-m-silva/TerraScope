@@ -1,0 +1,47 @@
+export const cases = {
+  flood: {
+    index: "SIGNAL 01 / 03",
+    source: "NISAR · 12-DAY REPEAT",
+    kicker: "FLOOD CHANGE / URUGUAY RIVER",
+    title: "Look closer when the river moves.",
+    description:
+      "Compare repeat NISAR observations around Uruguaiana to flag candidate new-water areas. A consistent orbit and paired dates make the change easier to inspect.",
+    stat: "176",
+    unit: "ha",
+    statLabel: "candidate inundation footprint<br />7 locations flagged for review",
+    image: "scenes/change.png",
+    alt: "NISAR satellite comparison showing the Uruguay River area before and after observation",
+    link: "flood.html",
+    linkLabel: "Open flood monitor",
+  },
+  vegetation: {
+    index: "SIGNAL 02 / 03",
+    source: "MODIS + NISAR · 2016–2026",
+    kicker: "VEGETATION / FLORESTA, BRAZIL",
+    title: "Put this season in context.",
+    description:
+      "Pair a decade of September MODIS observations with a short NISAR series over Floresta. Long-term context and recent passes tell different parts of the story.",
+    stat: "61.4",
+    unit: "%",
+    statLabel: "of MODIS pixels show a<br />declining trend in this study area",
+    image: "degradation/modis-trend.png",
+    alt: "MODIS vegetation trend visualization for Floresta, Pernambuco",
+    link: "degradation.html",
+    linkLabel: "Explore vegetation trends",
+  },
+  drylands: {
+    index: "SIGNAL 03 / 03",
+    source: "NISAR GCOV · CAATINGA",
+    kicker: "DRYLANDS / PERNAMBUCO, BRAZIL",
+    title: "Focus attention where it may matter.",
+    description:
+      "A preliminary vegetation-structure loss score highlights patches for closer review near the Caatinga. It is an exploratory signal—not a multi-year desertification classification.",
+    stat: "306.9",
+    unit: "ha",
+    statLabel: "of candidate vegetation-loss<br />patches in this analysis",
+    image: "desert/index.png",
+    alt: "Satellite-derived vegetation loss index across a dryland landscape in Pernambuco",
+    link: "desert.html",
+    linkLabel: "Explore the dryland view",
+  },
+};

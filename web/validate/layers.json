@@ -1,0 +1,44 @@
+{
+  "west": -40.55,
+  "south": -9.48,
+  "east": -40.45,
+  "north": -9.4,
+  "day": "2026-09-05",
+  "layers": [
+    {
+      "id": "RSLC",
+      "label": "Sinal complexo",
+      "file": "rslc.png",
+      "granule": "NISAR_L1_PR_RSLC_029_168_D_093_2005_SHSH_A_20260905T205456_20260905T205530_P05023_N_F_J_001",
+      "mean": 182.4
+    },
+    {
+      "id": "GSLC",
+      "label": "Sinal geocodificado",
+      "file": "gslc.png",
+      "granule": "NISAR_L2_PR_GSLC_029_168_D_093_2005_SHSH_A_20260905T205456_20260905T205530_P05023_N_F_J_001",
+      "mean": 156.1
+    },
+    {
+      "id": "GCOV",
+      "label": "Retroespalhamento HH/HV",
+      "file": "gcov.png",
+      "granule": "NISAR_L2_PR_GCOV_029_168_D_093_2005_SHSH_A_20260905T205456_20260905T205530_P05023_N_F_J_001",
+      "mean": 140.4
+    },
+    {
+      "id": "GUNW",
+      "label": "Coer\u00eancia e fase",
+      "file": "gunw.png",
+      "granule": "NISAR_L2_PR_GUNW_029_168_D_093_030_2000_SH_20260905T205456_20260905T205530_20260917T205455_20260917T205530_P05023_N_F_J_001",
+      "mean": 132.6
+    },
+    {
+      "id": "SME2",
+      "label": "Umidade do solo, m\u00e9dia 0.12 m\u00b3/m\u00b3",
+      "file": "sme2.png",
+      "granule": "NISAR_L3_PR_SME2_029_168_D_093_2005_SHSH_A_20260905T205456",
+      "mean": 0.119
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "place": "Caatinga near Petrolina, Pernambuco, Brazil",
+  "product": "Vegetation-structure loss score from NISAR GCOV",
+  "not": "This is not a multi-year desertification classification.",
+  "before": "2026-09-05",
+  "after": "2026-10-23",
+  "geometry": "Descending track 168, tiles with color on both 5 Sep and 23 Oct 2026",
+  "granule_hint": "NISAR_L2_GCOV track 168 frame 093, 5 Sep provisional and 23 Oct validated",
+  "method": "Score is the drop in the green (cross-pol) browse channel divided by 40, kept only where September green was at least 80. Polygons are the boxes around patches of at least 2 ha with score >= 0.40.",
+  "mean_score_where_loss": 0.27,
+  "risk_ha": 306.9,
+  "patches": [
+    {
+      "ha": 46.6,
+      "score": 0.96
+    },
+    {
+      "ha": 27.3,
+      "score": 0.87
+    },
+    {
+      "ha": 15.4,
+      "score": 1.0
+    },
+    {
+      "ha": 9.7,
+      "score": 0.71
+    },
+    {
+      "ha": 8.0,
+      "score": 0.58
+    },
+    {
+      "ha": 7.4,
+      "score": 0.66
+    },
+    {
+      "ha": 6.8,
+      "score": 0.76
+    },
+    {
+      "ha": 6.8,
+      "score": 0.58
+    },
+    {
+      "ha": 6.8,
+      "score": 0.98
+    },
+    {
+      "ha": 6.8,
+      "score": 0.76
+    },
+    {
+      "ha": 6.3,
+      "score": 0.63
+    },
+    {
+      "ha": 5.7,
+      "score": 0.86
+    }
+  ],
+  "bbox": [
+    -40.78125,
+    -9.622414,
+    -40.253906,
+    -8.928487
+  ],
+  "center": [
+    -9.27545,
+    -40.51758
+  ],
+  "pixel_m": 75.41
+}

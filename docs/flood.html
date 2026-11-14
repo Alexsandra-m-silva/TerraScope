@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flood monitor — Climate Guardian</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <style>
+      :root {
+        --ink: #0b1220;
+        --paper: #f4f1ea;
+        --accent: #3dd6c6;
+        --warn: #e8a54b;
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--paper); background: var(--ink); }
+      #map { position: absolute; inset: 0; }
+      .panel {
+        position: absolute; z-index: 500; top: 12px; left: 12px; width: min(380px, calc(100% - 24px));
+        background: rgba(11, 18, 32, 0.88); backdrop-filter: blur(10px);
+        border: 1px solid rgba(61, 214, 198, 0.35); border-radius: 14px; padding: 16px 16px 12px;
+      }
+      h1 { font-size: 1.05rem; margin: 0 0 4px; letter-spacing: 0.02em; }
+      .sub { color: #9aa7bd; font-size: 0.8rem; margin: 0 0 12px; }
+      label { display: block; font-size: 0.75rem; color: #9aa7bd; margin: 8px 0 4px; }
+      input[type="date"], button {
+        width: 100%; border-radius: 8px; border: 1px solid #334155; background: #111827; color: var(--paper);
+        padding: 8px 10px; font: inherit;
+      }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      button { cursor: pointer; background: #134e4a; border-color: var(--accent); margin-top: 10px; }
+      .legend { font-size: 0.72rem; color: #cbd5e1; margin-top: 10px; line-height: 1.35; }
+      .chip { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+      .compare {
+        position: absolute; z-index: 500; left: 50%; bottom: 18px; transform: translateX(-50%);
+        width: min(520px, calc(100% - 24px)); background: rgba(11, 18, 32, 0.9);
+        border: 1px solid rgba(232, 165, 75, 0.4); border-radius: 12px; padding: 10px 14px;
+      }
+      .compare input { width: 100%; }
+      .dates { display: flex; justify-content: space-between; font-size: 0.75rem; color: #e8a54b; }
+      .shots { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 10px; }
+      .shots figure { margin: 0; }
+      .shots img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; border: 1px solid #f5e642; }
+      .shots figcaption { font-size: 0.65rem; color: #9aa7bd; margin-top: 2px; }
+      .poly-label { background: #111; color: #ffe628; border: 0; font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <aside class="panel">
+      <h1>Climate Guardian</h1>
+      <p class="sub">Human check box, Uruguay River bank. Yellow rings are the same polygons on both dates. Keep a number only if it sits on bright land on 30 Sep and on dark water on 12 Oct.</p>
+      <div class="row">
+        <div>
+          <label>Before (NISAR)</label>
+          <input id="dateBefore" type="date" value="2026-09-30" />
+        </div>
+        <div>
+          <label>After (NISAR)</label>
+          <input id="dateAfter" type="date" value="2026-10-12" />
+        </div>
+      </div>
+      <label><input id="gpmToggle" type="checkbox" /> Overlay GPM IMERG rain (after date)</label>
+      <button id="apply">Reload NASA scenes</button>
+      <div class="shots">
+        <figure><img src="scenes/before.png?v=4" alt="NISAR 30 Sep 2026" /><figcaption>30 Sep + polygons</figcaption></figure>
+        <figure><img src="scenes/after.png?v=4" alt="NISAR 12 Oct 2026" /><figcaption>12 Oct + polygons</figcaption></figure>
+        <figure><img src="scenes/change.png?v=4" alt="Side by side" /><figcaption>Side by side</figcaption></figure>
+      </div>
+      <p class="legend">
+        <span class="chip" style="background:#ff3030"></span> polygon to check
+        <span class="chip" style="background:#f5e642"></span> outline, same on both dates<br />
+        Drag the slider. The rings stay put. Reject any number that is already dark on 30 Sep.
+      </p>
+      <div id="stats" class="legend"></div>
+    </aside>
+    <div class="compare">
+      <div class="dates"><span id="labelBefore">before</span><span>drag to compare</span><span id="labelAfter">after</span></div>
+      <input id="slider" type="range" min="0" max="100" value="50" />
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      const GIBS = "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best";
+      const NISAR = "NISAR_L2_Geocoded_Polarimetric_Covariance";
+      const GPM = "IMERG_Precipitation_Rate";
+      const uruguaiana = [-29.726, -57.041];
+
+      const map = L.map("map", { zoomControl: true }).setView(uruguaiana, 14);
+      L.tileLayer(
+        "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg",
+        {
+          attribution: "NASA GIBS Blue Marble · NISAR GCOV · GPM IMERG",
+          maxNativeZoom: 8,
+          maxZoom: 16,
+        }
+      ).addTo(map);
+
+      function nisarUrl(date) {
+        return `${GIBS}/${NISAR}/default/${date}/GoogleMapsCompatible_Level13/{z}/{y}/{x}.png`;
+      }
+      function gpmUrl(date) {
+        return `${GIBS}/${GPM}/default/${date}/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png`;
+      }
+
+      let beforeLayer, afterLayer, gpmLayer, polyLayer;
+
+      function clipAfter() {
+        const pct = Number(document.getElementById("slider").value);
+        if (afterLayer) afterLayer.setOpacity(pct / 100);
+      }
+
+      function showCheck(bounds) {
+        const leafletBounds = [[bounds.south, bounds.west], [bounds.north, bounds.east]];
+        if (beforeLayer) map.removeLayer(beforeLayer);
+        if (afterLayer) map.removeLayer(afterLayer);
+        beforeLayer = L.imageOverlay("scenes/before.png?v=4", leafletBounds, { opacity: 1 }).addTo(map);
+        afterLayer = L.imageOverlay("scenes/after.png?v=4", leafletBounds, { opacity: 0.5 }).addTo(map);
+        map.fitBounds(leafletBounds, { padding: [24, 24] });
+        clipAfter();
+      }
+
+      function refresh() {
+        document.getElementById("labelBefore").textContent = "2026-09-30";
+        document.getElementById("labelAfter").textContent = "2026-10-12";
+        fetch("scenes/bounds.json").then((r) => r.json()).then(showCheck);
+        syncGpm();
+      }
+
+      function syncGpm() {
+        const after = document.getElementById("dateAfter").value;
+        if (gpmLayer) {
+          map.removeLayer(gpmLayer);
+          gpmLayer = null;
+        }
+        if (!document.getElementById("gpmToggle").checked) return;
+        gpmLayer = L.tileLayer(gpmUrl(after), {
+          opacity: 0.38,
+          maxNativeZoom: 6,
+          maxZoom: 16,
+          zIndex: 250,
+          attribution: "NASA GPM IMERG via GIBS",
+        }).addTo(map);
+      }
+
+      document.getElementById("slider").addEventListener("input", clipAfter);
+      document.getElementById("apply").addEventListener("click", refresh);
+      document.getElementById("gpmToggle").addEventListener("change", syncGpm);
+      fetch("scenes/change_polygons.geojson")
+        .then((r) => r.json())
+        .then((geo) => {
+          polyLayer = L.geoJSON(geo, {
+            style: { color: "#ffe628", weight: 2, fillColor: "#ff2a2a", fillOpacity: 0.25 },
+            onEachFeature: (feature, layer) => {
+              const p = feature.properties;
+              layer.bindTooltip(`#${p.id} · ${p.ha} ha`, { permanent: true, direction: "center", className: "poly-label" });
+            },
+          }).addTo(map);
+        });
+      refresh();
+
+      fetch("scenes/change_stats.json")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((stats) => {
+          if (!stats) return;
+          const lines = (stats.polygon_ha || [])
+            .map((p) => `#${p.id} ${p.ha} ha`)
+            .join(" · ");
+          document.getElementById("stats").innerHTML =
+            `<strong>${stats.polygons} polygons, ${stats.new_inundation_ha} ha</strong><br>${lines}`;
+        })
+        .catch(() => {});
+    </script>
+  </body>
+</html>
