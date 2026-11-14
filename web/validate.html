@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NISAR — caixa de validação</title>
+    <title>Soil-moisture validation view | TerraScope</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-      html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #10140f; color: #f4efe6; }
+      html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #182b27; color: #fbfaf6; }
       #map { position: absolute; inset: 0; }
       .panel {
         position: absolute; z-index: 500; top: 12px; left: 12px; width: min(340px, calc(100% - 24px));
-        background: rgba(16, 20, 15, 0.92); border: 1px solid rgba(240, 195, 106, 0.45);
+        background: rgba(24, 43, 39, 0.95); border: 1px solid rgba(201, 223, 155, 0.48);
         border-radius: 14px; padding: 16px;
       }
       h1 { font-size: 1.05rem; margin: 0 0 4px; }
-      p { font-size: 0.78rem; line-height: 1.4; color: #e7d7c3; margin: 0 0 8px; }
+      .home-link { display: inline-block; margin-bottom: 10px; color: #c9df9b; font-size: 0.72rem; text-decoration: none; }
+      .home-link:hover { text-decoration: underline; }
+      p { font-size: 0.78rem; line-height: 1.4; color: #d7dfd8; margin: 0 0 8px; }
       label { display: flex; gap: 8px; align-items: center; font-size: 0.8rem; margin: 0 0 6px; cursor: pointer; }
       .legend { margin: 4px 0 10px 22px; }
       .legend[hidden] { display: none; }
@@ -27,15 +29,16 @@
           rgb(75, 110, 195) 75%,
           rgb(30, 90, 230) 100%);
       }
-      .ticks { display: flex; justify-content: space-between; font-size: 0.68rem; color: #cbbba6; margin-top: 3px; }
+      .ticks { display: flex; justify-content: space-between; font-size: 0.68rem; color: #b9c5bc; margin-top: 3px; }
       .legend p { margin: 4px 0 0; font-size: 0.7rem; }
     </style>
   </head>
   <body>
     <div id="map"></div>
     <aside class="panel">
-      <h1>Caixa de validação</h1>
-      <p>5 set 2026, perto de Petrolina. Órbita 168, quadro 093. A umidade é o SME2 lido do arquivo. Cada pixel tem cerca de 200 m. As outras camadas são as imagens públicas dos grânulos.</p>
+      <a class="home-link" href="index.html">← TerraScope</a>
+      <h1>Soil-moisture validation view</h1>
+      <p>5 September 2026 near Petrolina, orbit 168, frame 093. SME2 is the soil-moisture layer read from the product; pixel size is about 200 m. Other layers are public granule browse images. Blank areas indicate no observation, not zero moisture.</p>
       <div id="toggles"></div>
     </aside>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -56,8 +59,8 @@
         legend.className = "legend";
         legend.innerHTML =
           '<div class="ramp"></div>' +
-          '<div class="ticks"><span>0,00</span><span>0,10</span><span>0,20</span><span>0,30</span><span>0,40+</span></div>' +
-          '<p>m³ de água por m³ de solo. Neste retângulo: 0,04 a 0,49. A maior parte dos pixels fica entre 0,09 e 0,16. Acima de 0,40 a cor para no azul mais escuro. Onde o satélite não aparece, não houve leitura.</p>';
+          '<div class="ticks"><span>0.00</span><span>0.10</span><span>0.20</span><span>0.30</span><span>0.40+</span></div>' +
+          '<p>Water content (m³/m³). In this area: 0.04–0.49; most pixels fall between 0.09 and 0.16. Values above 0.40 use the darkest blue. Missing swaths have no satellite reading.</p>';
         meta.layers.forEach((layer) => {
           const overlay = L.imageOverlay("validate/" + layer.file, bounds, { opacity: 0.85 });
           const label = document.createElement("label");

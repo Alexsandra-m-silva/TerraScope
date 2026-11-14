@@ -5,207 +5,344 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Climate Guardian turns open NASA Earth observations into clear, traceable environmental signals."
+      content="TerraScope combines Earth observation and local context to understand land degradation, food vulnerability, and restoration opportunities."
     />
-    <meta name="theme-color" content="#081715" />
-    <title>Climate Guardian — Earth signals, made clear</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <meta name="theme-color" content="#fbfaf6" />
+    <title>TerraScope | Environmental Intelligence</title>
     <link rel="stylesheet" href="assets/css/landing.css" />
     <script type="module" src="assets/js/landing.js"></script>
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#top" aria-label="Climate Guardian home">
-        <span class="brand-mark" aria-hidden="true"><span></span></span>
-        <span class="brand-name">climate<span>guardian</span></span>
-      </a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="#approach">Our approach</a>
-        <a href="#signals">Explore signals</a>
-        <a href="#science">The science</a>
+      <nav class="wrap navigation" aria-label="Main navigation">
+        <a class="brand" href="#top" aria-label="TerraScope home">
+          <span class="brand-mark" aria-hidden="true">✳</span>
+          <span>TerraScope</span>
+        </a>
+        <div class="nav-links">
+          <a href="#challenge">The challenge</a>
+          <a href="#solution">Our approach</a>
+          <a href="#index">Food vulnerability</a>
+          <a href="#impact">Expected impact</a>
+        </div>
+        <a class="nav-cta" href="#platform">Explore the project <span aria-hidden="true">↗</span></a>
       </nav>
-      <a class="header-link" href="flood.html">
-        Open the platform <span aria-hidden="true">↗</span>
-      </a>
     </header>
 
     <main id="top">
-      <section class="hero page-wrap" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <div class="eyebrow"><span class="live-dot"></span> NASA SPACE APPS CHALLENGE · 2026</div>
-          <h1 id="hero-title">A changing planet.<br /><span>Seen more clearly.</span></h1>
-          <p class="hero-intro">
-            We turn open Earth-observation data into practical signals for the people protecting
-            land, water, and communities.
-          </p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#signals">Explore the signals <span aria-hidden="true">↓</span></a>
-            <a class="button button-quiet" href="flood.html">Open flood monitor <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="hero-proof">
-            <span class="proof-icon" aria-hidden="true">◎</span>
-            <span><strong>Built with open NASA data</strong><br />NISAR · MODIS · GPM IMERG</span>
-          </div>
-        </div>
-
-        <div class="hero-visual">
-          <div class="orbit orbit-one"></div>
-          <div class="orbit orbit-two"></div>
-          <div class="visual-card">
-            <div class="visual-topline">
-              <span class="mono-label">FIELD NOTE / 001</span>
-              <span class="status-tag"><span></span> ANALYSIS PREVIEW</span>
-            </div>
-            <div class="visual-image">
-              <img src="scenes/change.png" alt="NISAR satellite image comparison of a river landscape before and after a flood observation" />
-              <div class="image-caption">
-                <span>URUGUAY RIVER · NISAR GCOV</span>
-                <span>30 SEP — 12 OCT 2026</span>
-              </div>
-            </div>
-            <div class="visual-reading">
-              <div>
-                <span class="reading-label">CANDIDATE CHANGE AREA</span>
-                <strong>176 <small>ha</small></strong>
-              </div>
-              <div class="reading-divider"></div>
-              <div>
-                <span class="reading-label">SITES TO REVIEW</span>
-                <strong>07 <small>signals</small></strong>
-              </div>
-              <span class="reading-arrow" aria-hidden="true">↗</span>
-            </div>
-            <p class="visual-footnote">Exploratory satellite analysis · human validation required</p>
-          </div>
-          <div class="orbit-label orbit-label-top">L-BAND / 15.6 M</div>
-          <div class="orbit-label orbit-label-bottom">EARTH OBSERVATION / OPEN DATA</div>
-        </div>
-        <a class="scroll-cue" href="#approach"><span></span> SCROLL TO EXPLORE</a>
-      </section>
-
-      <section class="approach-section" id="approach" aria-labelledby="approach-title">
-        <div class="page-wrap approach-grid">
-          <div>
-            <p class="section-kicker">01 / THE IDEA</p>
-            <h2 id="approach-title">From pixels in orbit<br />to signals on the ground.</h2>
-          </div>
-          <div class="approach-copy">
-            <p>
-              Satellites see patterns that are difficult to spot from the ground. Climate Guardian
-              brings those observations together, highlights where change may be happening, and
-              makes the evidence easier to inspect.
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Environmental intelligence for a resilient future</p>
+            <h1>See land change.<br /><em>Understand impact.</em><br />Enable action.</h1>
+            <p class="hero-intro">
+              TerraScope brings satellite observations, environmental data, and AI-supported
+              analysis together to help identify land degradation, understand food vulnerability,
+              and prioritize opportunities for ecosystem restoration.
             </p>
-            <div class="data-ribbon" aria-label="NASA data sources">
-              <span><i class="source-dot teal"></i>NISAR <small>surface change</small></span>
-              <span><i class="source-dot blue"></i>MODIS <small>long-term trends</small></span>
-              <span><i class="source-dot violet"></i>GPM IMERG <small>precipitation</small></span>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#solution">Discover the approach <span aria-hidden="true">↓</span></a>
+              <a class="button button-secondary" href="#platform">Explore current prototypes</a>
             </div>
+            <p class="hero-note"><span aria-hidden="true"></span> NASA Space Apps Challenge · 2026</p>
           </div>
-        </div>
-      </section>
 
-      <section class="signals-section page-wrap" id="signals" aria-labelledby="signals-title">
-        <div class="section-heading">
-          <div>
-            <p class="section-kicker">02 / OBSERVATION DECK</p>
-            <h2 id="signals-title">One planet. Many signals.</h2>
-          </div>
-          <p class="section-aside">Select a case to explore the data behind each view.</p>
-        </div>
-
-        <div class="signal-tabs" role="group" aria-label="Choose an environmental signal">
-          <button class="signal-tab is-active" type="button" data-case="flood" aria-pressed="true">
-            <span>01</span> Flood change
-          </button>
-          <button class="signal-tab" type="button" data-case="vegetation" aria-pressed="false">
-            <span>02</span> Vegetation
-          </button>
-          <button class="signal-tab" type="button" data-case="drylands" aria-pressed="false">
-            <span>03</span> Drylands
-          </button>
-        </div>
-
-        <article class="signal-feature" aria-live="polite">
-          <div class="feature-image-wrap">
+          <figure class="hero-visual">
             <img
-              id="case-image"
               src="scenes/change.png"
-              alt="NISAR satellite comparison showing the Uruguay River area before and after observation"
+              alt="Paired NISAR satellite observations around the Uruguay River"
             />
-            <span class="image-index" id="case-index">SIGNAL 01 / 03</span>
-            <span class="image-source" id="case-source">NISAR · 12-DAY REPEAT</span>
-          </div>
-          <div class="feature-copy">
-            <p class="section-kicker" id="case-kicker">FLOOD CHANGE / URUGUAY RIVER</p>
-            <h3 id="case-title">Look closer when the river moves.</h3>
-            <p class="feature-description" id="case-description">
-              Compare repeat NISAR observations around Uruguaiana to flag candidate new-water
-              areas. A consistent orbit and paired dates make the change easier to inspect.
-            </p>
-            <div class="feature-stat">
-              <strong id="case-stat">176 <small>ha</small></strong>
-              <span id="case-stat-label">candidate inundation footprint<br />7 locations flagged for review</span>
+            <figcaption class="map-label">NISAR GCOV / REPEAT OBSERVATION</figcaption>
+            <span class="map-pin pin-one" aria-hidden="true"></span>
+            <span class="map-pin pin-two" aria-hidden="true"></span>
+            <span class="map-pin pin-three" aria-hidden="true"></span>
+            <div class="map-card">
+              <span class="card-eyebrow">PROTOTYPE / URUGUAY RIVER</span>
+              <strong>176 <small>ha</small></strong>
+              <span>candidate change area · human review required</span>
             </div>
-            <a class="text-link" id="case-link" href="flood.html">
-              Open flood monitor <span aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </article>
-        <p class="caveat">
-          These are exploratory analyses, not official alerts or verified ground conditions.
-          Methods, resolution, and uncertainty vary by data product.
-        </p>
+            <span class="visual-coordinate">29°43′S &nbsp; 57°03′W</span>
+          </figure>
+        </div>
       </section>
 
-      <section class="science-section" id="science" aria-labelledby="science-title">
-        <div class="page-wrap science-grid">
-          <div class="science-copy">
-            <p class="section-kicker">03 / BUILT FOR TRUST</p>
-            <h2 id="science-title">Show the evidence.<br /><span>Respect its limits.</span></h2>
+      <div class="wrap value-strip" aria-label="TerraScope principles">
+        <div class="value-item">
+          <span class="value-symbol" aria-hidden="true">⌁</span>
+          <div><strong>Satellite-informed</strong><span>Earth observation and geospatial analysis</span></div>
+        </div>
+        <div class="value-item">
+          <span class="value-symbol" aria-hidden="true">◎</span>
+          <div><strong>People-centered</strong><span>Environmental risks connected to social outcomes</span></div>
+        </div>
+        <div class="value-item">
+          <span class="value-symbol" aria-hidden="true">↗</span>
+          <div><strong>Action-oriented</strong><span>Evidence to guide prevention and restoration</span></div>
+        </div>
+      </div>
+
+      <section class="section" id="challenge">
+        <div class="wrap">
+          <div class="section-heading">
+            <p class="eyebrow">01 / The challenge</p>
+            <h2>Land degradation is an environmental issue—and a human one.</h2>
             <p>
-              Every signal starts with an observable question. We pair NASA satellite products
-              with transparent comparisons, readable context, and a clear reminder that a model
-              is a starting point for investigation—not the final word.
+              Desertification and soil degradation can reduce agricultural productivity,
+              intensify water stress, and weaken the resilience of communities and food systems.
+              Understanding where pressures are emerging is an important step toward responding
+              effectively.
             </p>
-            <a class="button button-outline" href="flood.html">Inspect the NISAR case <span aria-hidden="true">↗</span></a>
           </div>
-          <div class="science-list">
-            <div class="science-row">
-              <span class="science-number">01</span>
-              <div><h3>Observe</h3><p>Start from open satellite imagery and repeat observations.</p></div>
-              <span class="science-symbol" aria-hidden="true">⌁</span>
+          <div class="card-grid">
+            <article class="info-card">
+              <span class="card-icon" aria-hidden="true">⌁</span>
+              <h3>Environmental degradation</h3>
+              <p>
+                Changes in vegetation, soil moisture, and land conditions can signal growing
+                pressure on ecosystems and productive landscapes.
+              </p>
+            </article>
+            <article class="info-card">
+              <span class="card-icon icon-orange" aria-hidden="true">♧</span>
+              <h3>Agricultural and water stress</h3>
+              <p>
+                Drought, declining soil conditions, and water scarcity can threaten crops,
+                livestock, livelihoods, and local food availability.
+              </p>
+            </article>
+            <article class="info-card">
+              <span class="card-icon icon-lime" aria-hidden="true">◎</span>
+              <h3>Community vulnerability</h3>
+              <p>
+                Environmental shocks can have greater consequences where poverty, limited
+                resources, or barriers to food access already exist.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="solution-section" id="solution">
+        <div class="wrap">
+          <div class="section-heading section-heading-light">
+            <p class="eyebrow">02 / Our approach</p>
+            <h2>Turn multiple data sources into a clearer picture of risk.</h2>
+            <p>
+              TerraScope is designed to combine Earth observation with climate, agricultural, and
+              socioeconomic information. AI-supported analysis can reveal patterns and flag
+              unusual changes—while local data and expert validation remain essential.
+            </p>
+          </div>
+          <div class="process-grid">
+            <article class="process-step">
+              <span class="step-number">01 / OBSERVE</span>
+              <h3>Collect geospatial data</h3>
+              <p>Use satellite observations alongside climate, land, and agricultural datasets.</p>
+            </article>
+            <article class="process-step">
+              <span class="step-number">02 / ANALYZE</span>
+              <h3>Detect environmental change</h3>
+              <p>Analyze vegetation, surface conditions, water dynamics, and land use over time.</p>
+            </article>
+            <article class="process-step">
+              <span class="step-number">03 / CONNECT</span>
+              <h3>Assess human impacts</h3>
+              <p>Combine environmental signals with agricultural and socioeconomic indicators.</p>
+            </article>
+            <article class="process-step">
+              <span class="step-number">04 / ACT</span>
+              <h3>Support targeted action</h3>
+              <p>Prioritize areas for investigation, prevention, restoration, and resilience.</p>
+            </article>
+          </div>
+          <p class="method-note">
+            Satellite observations do not directly measure food insecurity. TerraScope would
+            estimate vulnerability by combining environmental indicators with appropriate local
+            household, agricultural, and socioeconomic data.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="index">
+        <div class="wrap index-grid">
+          <div class="index-copy">
+            <p class="eyebrow">03 / A proposed analytical component</p>
+            <h2>Food Vulnerability Index</h2>
+            <p>
+              A proposed composite indicator to help identify places where environmental
+              pressures may increase the risk of food insecurity. It connects environmental
+              exposure with agricultural sensitivity and community-level vulnerability.
+            </p>
+            <p>
+              The index would be developed and validated with appropriate local data. It is
+              intended as a decision-support tool—not a direct measurement of household food
+              insecurity.
+            </p>
+            <a class="text-link" href="#data">See the data that could inform it <span aria-hidden="true">↓</span></a>
+          </div>
+          <div class="index-panel">
+            <div class="panel-heading">
+              <span class="panel-mark" aria-hidden="true">✳</span>
+              <div><span class="card-eyebrow">FRAMEWORK / UNDER DEVELOPMENT</span><h3>Potential dimensions</h3></div>
             </div>
-            <div class="science-row">
-              <span class="science-number">02</span>
-              <div><h3>Compare</h3><p>Make dates, sensors, and visual differences easy to explore.</p></div>
-              <span class="science-symbol" aria-hidden="true">⇄</span>
+            <div class="metric-row">
+              <span class="metric-number">01</span>
+              <div><strong>Environmental exposure</strong><span>Drought, soil moisture, land degradation, and vegetation change.</span></div>
             </div>
-            <div class="science-row">
-              <span class="science-number">03</span>
-              <div><h3>Validate</h3><p>Keep uncertainty visible and invite human review.</p></div>
-              <span class="science-symbol" aria-hidden="true">◎</span>
+            <div class="metric-row">
+              <span class="metric-number">02</span>
+              <div><strong>Agricultural sensitivity</strong><span>Crop dependence, production trends, growing conditions, and water availability.</span></div>
+            </div>
+            <div class="metric-row">
+              <span class="metric-number">03</span>
+              <div><strong>Socioeconomic vulnerability</strong><span>Income, poverty, food access, infrastructure, and capacity to respond.</span></div>
+            </div>
+            <div class="metric-row">
+              <span class="metric-number">04</span>
+              <div><strong>Adaptive capacity</strong><span>Irrigation, support programs, resilient practices, and local resources.</span></div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="impact-section" id="impact">
+        <div class="wrap">
+          <div class="section-heading">
+            <p class="eyebrow">04 / From insight to impact</p>
+            <h2>Help direct attention and resources where they can matter most.</h2>
+            <p>
+              By connecting environmental monitoring with social and agricultural context, the
+              project aims to support better-informed decisions across restoration and food
+              systems.
+            </p>
+          </div>
+          <div class="card-grid">
+            <article class="info-card impact-card">
+              <span class="card-icon" aria-hidden="true">⌖</span>
+              <h3>Prioritize restoration</h3>
+              <p>Identify degraded areas that may warrant field assessment and restoration planning.</p>
+            </article>
+            <article class="info-card impact-card">
+              <span class="card-icon icon-orange" aria-hidden="true">↗</span>
+              <h3>Strengthen resilience</h3>
+              <p>Help stakeholders understand emerging risks and consider preventive measures.</p>
+            </article>
+            <article class="info-card impact-card">
+              <span class="card-icon icon-lime" aria-hidden="true">♡</span>
+              <h3>Inform social support</h3>
+              <p>Highlight communities that may need closer assessment and targeted support.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section data-section" id="data">
+        <div class="wrap">
+          <div class="section-heading">
+            <p class="eyebrow">05 / Data and technology</p>
+            <h2>Built on complementary sources, not a single satellite.</h2>
+            <p>
+              NISAR is one potential source of Earth-observation information. Its radar
+              measurements can help monitor land and vegetation structure; other datasets add
+              context for food vulnerability and restoration outcomes.
+            </p>
+          </div>
+          <div class="card-grid">
+            <article class="info-card data-card">
+              <span class="card-icon" aria-hidden="true">◉</span>
+              <h3>Earth observation</h3>
+              <p>NASA–ISRO NISAR, Sentinel missions, Landsat, MODIS, and other suitable sources.</p>
+            </article>
+            <article class="info-card data-card">
+              <span class="card-icon icon-orange" aria-hidden="true">☁</span>
+              <h3>Climate and agriculture</h3>
+              <p>Rainfall, temperature, drought, crop production, land use, and water resources.</p>
+            </article>
+            <article class="info-card data-card">
+              <span class="card-icon icon-lime" aria-hidden="true">▤</span>
+              <h3>Socioeconomic context</h3>
+              <p>Population, income, poverty, food access, and locally relevant public statistics.</p>
+            </article>
+          </div>
+          <p class="footnote">
+            Data sources, spatial resolution, update frequency, and methods depend on the pilot
+            region and data availability.
+          </p>
+        </div>
+      </section>
+
+      <section class="section prototypes-section" id="platform">
+        <div class="wrap">
+          <div class="section-heading">
+            <p class="eyebrow">06 / Current satellite prototypes</p>
+            <h2>Explore the observations behind the concept.</h2>
+            <p>
+              These focused demonstrations show how satellite signals can be compared and
+              inspected. They are research prototypes, not a complete food-vulnerability service.
+            </p>
+          </div>
+          <div class="case-tabs" role="group" aria-label="Select a satellite prototype">
+            <button class="case-tab is-active" type="button" data-case="flood" aria-pressed="true">01 &nbsp; Flood change</button>
+            <button class="case-tab" type="button" data-case="vegetation" aria-pressed="false">02 &nbsp; Vegetation trends</button>
+            <button class="case-tab" type="button" data-case="drylands" aria-pressed="false">03 &nbsp; Dryland watch</button>
+          </div>
+          <article class="case-panel" aria-live="polite">
+            <figure class="case-image">
+              <img
+                id="case-image"
+                src="scenes/change.png"
+                alt="NISAR satellite comparison showing the Uruguay River area before and after observation"
+              />
+              <figcaption><span id="case-index">PROTOTYPE 01 / 03</span><span id="case-source">NISAR GCOV · SAME TRACK / FRAME</span></figcaption>
+            </figure>
+            <div class="case-copy">
+              <p class="eyebrow" id="case-kicker">SURFACE-WATER CHANGE / URUGUAY RIVER</p>
+              <h3 id="case-title">Compare repeat observations.</h3>
+              <p id="case-description">
+                A paired-scene experiment around Uruguaiana flags candidate new-water areas for
+                review. The mapped change is exploratory, not a verified flood boundary.
+              </p>
+              <div class="case-reading">
+                <strong id="case-stat">176 <small>ha</small></strong>
+                <span id="case-stat-label">candidate change footprint<br />7 areas for human review</span>
+              </div>
+              <a class="case-link" id="case-link" href="flood.html">
+                Inspect the flood prototype <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </article>
+          <p class="footnote">
+            Prototype indicators are exploratory and require validation. They are not official
+            alerts, verified ground conditions, or direct measurements of food insecurity.
+          </p>
+        </div>
+      </section>
+
+      <section class="closing-section">
+        <div class="wrap closing-card">
+          <div>
+            <p class="eyebrow">A collaborative project</p>
+            <h2>Better environmental insight.<br />More informed action.</h2>
+            <p>
+              TerraScope aims to connect technology, scientific knowledge, and local expertise
+              to understand land degradation, food vulnerability, and pathways to restoration.
+            </p>
+          </div>
+          <a class="button button-primary" href="#platform">Explore the prototypes <span aria-hidden="true">↑</span></a>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer page-wrap">
-      <a class="brand footer-brand" href="#top">
-        <span class="brand-mark" aria-hidden="true"><span></span></span>
-        <span class="brand-name">climate<span>guardian</span></span>
-      </a>
-      <p>Earth observation for a more resilient future.</p>
-      <div class="footer-meta">
-        <span>NASA SPACE APPS CHALLENGE 2026</span>
-        <a href="https://www.earthdata.nasa.gov/" target="_blank" rel="noreferrer">NASA Earthdata ↗</a>
+    <footer class="site-footer">
+      <div class="wrap footer-main">
+        <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">✳</span><span>TerraScope</span></a>
+        <p>Environmental intelligence for a resilient future.</p>
+        <span class="footer-year">NASA SPACE APPS CHALLENGE · 2026</span>
       </div>
-      <p class="footer-note">Climate Guardian is an independent challenge project and is not affiliated with or endorsed by NASA.</p>
+      <div class="wrap footer-note">
+        TerraScope is a challenge project concept and is not affiliated with or endorsed by NASA.
+        Food-vulnerability assessment requires locally validated data.
+      </div>
     </footer>
   </body>
 </html>

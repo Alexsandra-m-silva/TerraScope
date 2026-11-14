@@ -1,8 +1,11 @@
 # TerraScope
 
-Climate Guardian is the NASA Space Apps Challenge landing page and satellite-data showcase in
-[`web/`](web/). The static site includes interactive flood, vegetation, and dryland views.
-[`docs/`](docs/) is the publishable copy for GitHub Pages branch deployment.
+TerraScope is an environmental-intelligence project concept for the NASA Space Apps Challenge.
+It brings Earth observation and local context together to explore land degradation, a proposed
+Food Vulnerability Index, and restoration opportunities. The site also links to research
+prototypes for flood change, vegetation trends, and dryland monitoring.
+
+The working static site is in [`web/`](web/); [`docs/`](docs/) is its GitHub Pages copy.
 
 ## Local preview
 

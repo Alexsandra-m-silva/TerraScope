@@ -3,56 +3,59 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Flood monitor — Climate Guardian</title>
+    <title>Flood change prototype | TerraScope</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     />
     <style>
       :root {
-        --ink: #0b1220;
-        --paper: #f4f1ea;
-        --accent: #3dd6c6;
-        --warn: #e8a54b;
+        --ink: #182b27;
+        --paper: #fbfaf6;
+        --accent: #c9df9b;
+        --warn: #d47a4e;
       }
       * { box-sizing: border-box; }
       html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: var(--paper); background: var(--ink); }
       #map { position: absolute; inset: 0; }
       .panel {
         position: absolute; z-index: 500; top: 12px; left: 12px; width: min(380px, calc(100% - 24px));
-        background: rgba(11, 18, 32, 0.88); backdrop-filter: blur(10px);
-        border: 1px solid rgba(61, 214, 198, 0.35); border-radius: 14px; padding: 16px 16px 12px;
+        background: rgba(24, 43, 39, 0.94); backdrop-filter: blur(10px);
+        border: 1px solid rgba(201, 223, 155, 0.4); border-radius: 14px; padding: 16px 16px 12px;
       }
       h1 { font-size: 1.05rem; margin: 0 0 4px; letter-spacing: 0.02em; }
+      .home-link { display: inline-block; margin-bottom: 10px; color: var(--accent); font-size: 0.72rem; text-decoration: none; }
+      .home-link:hover { text-decoration: underline; }
       .sub { color: #9aa7bd; font-size: 0.8rem; margin: 0 0 12px; }
       label { display: block; font-size: 0.75rem; color: #9aa7bd; margin: 8px 0 4px; }
       input[type="date"], button {
-        width: 100%; border-radius: 8px; border: 1px solid #334155; background: #111827; color: var(--paper);
+        width: 100%; border-radius: 8px; border: 1px solid #587065; background: #20352f; color: var(--paper);
         padding: 8px 10px; font: inherit;
       }
       .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-      button { cursor: pointer; background: #134e4a; border-color: var(--accent); margin-top: 10px; }
+      button { cursor: pointer; background: #245b48; border-color: var(--accent); margin-top: 10px; }
       .legend { font-size: 0.72rem; color: #cbd5e1; margin-top: 10px; line-height: 1.35; }
       .chip { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
       .compare {
         position: absolute; z-index: 500; left: 50%; bottom: 18px; transform: translateX(-50%);
-        width: min(520px, calc(100% - 24px)); background: rgba(11, 18, 32, 0.9);
-        border: 1px solid rgba(232, 165, 75, 0.4); border-radius: 12px; padding: 10px 14px;
+        width: min(520px, calc(100% - 24px)); background: rgba(24, 43, 39, 0.94);
+        border: 1px solid rgba(212, 122, 78, 0.55); border-radius: 12px; padding: 10px 14px;
       }
       .compare input { width: 100%; }
-      .dates { display: flex; justify-content: space-between; font-size: 0.75rem; color: #e8a54b; }
+      .dates { display: flex; justify-content: space-between; font-size: 0.75rem; color: #e2a47e; }
       .shots { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 10px; }
       .shots figure { margin: 0; }
-      .shots img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; border: 1px solid #f5e642; }
+      .shots img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; border: 1px solid var(--accent); }
       .shots figcaption { font-size: 0.65rem; color: #9aa7bd; margin-top: 2px; }
-      .poly-label { background: #111; color: #ffe628; border: 0; font-weight: 700; }
+      .poly-label { background: #182b27; color: #c9df9b; border: 0; font-weight: 700; }
     </style>
   </head>
   <body>
     <div id="map"></div>
     <aside class="panel">
-      <h1>Climate Guardian</h1>
-      <p class="sub">Human check box, Uruguay River bank. Yellow rings are the same polygons on both dates. Keep a number only if it sits on bright land on 30 Sep and on dark water on 12 Oct.</p>
+      <a class="home-link" href="index.html">← TerraScope</a>
+      <h1>Flood change prototype</h1>
+      <p class="sub">Uruguay River near Uruguaiana. The same candidate polygons are compared across two NISAR dates. Treat this as a screening view: check each location against both scenes and validate before interpreting it as inundation.</p>
       <div class="row">
         <div>
           <label>Before (NISAR)</label>
@@ -63,17 +66,17 @@
           <input id="dateAfter" type="date" value="2026-10-12" />
         </div>
       </div>
-      <label><input id="gpmToggle" type="checkbox" /> Overlay GPM IMERG rain (after date)</label>
-      <button id="apply">Reload NASA scenes</button>
+      <label><input id="gpmToggle" type="checkbox" /> Show GPM IMERG rainfall context</label>
+      <button id="apply">Reset scene comparison</button>
       <div class="shots">
         <figure><img src="scenes/before.png?v=4" alt="NISAR 30 Sep 2026" /><figcaption>30 Sep + polygons</figcaption></figure>
         <figure><img src="scenes/after.png?v=4" alt="NISAR 12 Oct 2026" /><figcaption>12 Oct + polygons</figcaption></figure>
         <figure><img src="scenes/change.png?v=4" alt="Side by side" /><figcaption>Side by side</figcaption></figure>
       </div>
       <p class="legend">
-        <span class="chip" style="background:#ff3030"></span> polygon to check
-        <span class="chip" style="background:#f5e642"></span> outline, same on both dates<br />
-        Drag the slider. The rings stay put. Reject any number that is already dark on 30 Sep.
+        <span class="chip" style="background:#d47a4e"></span> candidate area
+        <span class="chip" style="background:#c9df9b"></span> same outline on both dates<br />
+        Compare both observations. Exclude locations that do not show a clear change.
       </p>
       <div id="stats" class="legend"></div>
     </aside>
@@ -152,7 +155,7 @@
         .then((r) => r.json())
         .then((geo) => {
           polyLayer = L.geoJSON(geo, {
-            style: { color: "#ffe628", weight: 2, fillColor: "#ff2a2a", fillOpacity: 0.25 },
+            style: { color: "#c9df9b", weight: 2, fillColor: "#d47a4e", fillOpacity: 0.25 },
             onEachFeature: (feature, layer) => {
               const p = feature.properties;
               layer.bindTooltip(`#${p.id} · ${p.ha} ha`, { permanent: true, direction: "center", className: "poly-label" });

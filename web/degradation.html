@@ -1,39 +1,42 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tendência da vegetação — Floresta</title>
+    <title>Vegetation change prototype | TerraScope</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-      html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #10140f; color: #f4efe6; }
+      html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #182b27; color: #fbfaf6; }
       #map { position: absolute; inset: 0; }
       .panel {
         position: absolute; z-index: 500; top: 12px; left: 12px; width: min(400px, calc(100% - 24px));
-        background: rgba(16, 20, 15, 0.92); border: 1px solid rgba(240, 195, 106, 0.45);
+        background: rgba(24, 43, 39, 0.95); border: 1px solid rgba(201, 223, 155, 0.48);
         border-radius: 14px; padding: 16px; max-height: calc(100% - 24px); overflow: auto;
       }
       h1 { font-size: 1.05rem; margin: 0 0 6px; }
-      p, li { font-size: 0.78rem; line-height: 1.4; color: #e7d7c3; }
+      .home-link { display: inline-block; margin-bottom: 10px; color: #c9df9b; font-size: 0.72rem; text-decoration: none; }
+      .home-link:hover { text-decoration: underline; }
+      p, li { font-size: 0.78rem; line-height: 1.4; color: #d7dfd8; }
       p { margin: 0 0 8px; }
       ul { margin: 0 0 10px; padding-left: 18px; }
       .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
       button {
-        font: inherit; font-size: 0.78rem; color: #f4efe6; background: transparent;
-        border: 1px solid rgba(240, 195, 106, 0.45); border-radius: 999px;
+        font: inherit; font-size: 0.78rem; color: #fbfaf6; background: transparent;
+        border: 1px solid rgba(201, 223, 155, 0.48); border-radius: 999px;
         padding: 6px 10px; cursor: pointer;
       }
-      button.on { background: #f0c36a; color: #1b1408; border-color: #f0c36a; }
+      button.on { background: #c9df9b; color: #182b27; border-color: #c9df9b; }
       .ramp { height: 12px; border-radius: 6px; margin-top: 4px;
         background: linear-gradient(to right, rgb(176, 48, 36), rgb(196, 176, 130), rgb(46, 130, 58)); }
-      .ticks { display: flex; justify-content: space-between; font-size: 0.68rem; color: #cbbba6; margin-top: 3px; }
-      #rain strong { color: #f4efe6; font-weight: 600; }
+      .ticks { display: flex; justify-content: space-between; font-size: 0.68rem; color: #b9c5bc; margin-top: 3px; }
+      #rain strong { color: #fbfaf6; font-weight: 600; }
     </style>
   </head>
   <body>
     <div id="map"></div>
     <aside class="panel">
-      <h1>Tendência da vegetação</h1>
+      <a class="home-link" href="index.html">← TerraScope</a>
+      <h1>Vegetation change prototype</h1>
       <p id="lead"></p>
       <div class="row" id="sensors"></div>
       <div class="row" id="steps"></div>
@@ -67,8 +70,8 @@
         const trend = state.step === "trend";
         show(trend ? state.sensor + "-trend" : state.sensor + "-" + state.step);
         const unit = state.sensor === "modis"
-          ? "queda por ano · setembro 2016–2026 · alta por ano"
-          : "queda na série · jun–out 2026 · alta na série";
+          ? "declining per year · September 2016–2026 · increasing per year"
+          : "declining across series · June–October 2026 · increasing across series";
         document.getElementById("legend").innerHTML = trend
           ? '<div class="ramp"></div><div class="ticks"><span>' + unit.split(" · ")[0] + "</span><span>" + unit.split(" · ")[1] + "</span><span>" + unit.split(" · ")[2] + "</span></div>"
           : "";
@@ -104,7 +107,7 @@
           const box = document.getElementById("steps");
           box.innerHTML = "";
           const trend = document.createElement("button");
-          trend.textContent = "Tendência";
+          trend.textContent = "Trend";
           trend.dataset.id = "trend";
           trend.onclick = () => { state.step = "trend"; apply(stats); };
           box.appendChild(trend);
@@ -129,17 +132,17 @@
           .map((day) => day.slice(5) + " " + stats.nisar_means[day])
           .join(" · ");
         document.getElementById("lead").textContent =
-          stats.place + ". Caixa de cerca de 13 km. O MODIS é a tendência de todos os setembros, de 2016 a 2026. O NISAR não tem anos anteriores: são seis passagens da mesma órbita e da mesma polarização, de 25 jun a 23 out 2026.";
+          stats.place + ". Study area is about 13 km across. MODIS shows September observations from 2016–2026. NISAR has no earlier years here: these are six passes from the same orbit and polarization between 25 June and 23 October 2026.";
         document.getElementById("rain").innerHTML =
-          "<p><strong>Chuva, NASA POWER.</strong> Setembro no centro da caixa: " + september + ".</p>" +
-          "<p>De 25 jun a 23 out, soma diária. Junho e outubro não são o mês inteiro: " + months + ".</p>";
+          "<p><strong>Rainfall, NASA POWER.</strong> September at the center of the study area: " + september + ".</p>" +
+          "<p>Daily totals from 25 June to 23 October; June and October are partial months: " + months + ".</p>";
         document.getElementById("facts").innerHTML =
-          "<li>MODIS: a inclinação média é " + stats.modis_slope_per_year +
-          " por ano na escala de cor. " + stats.modis_falling_pct +
-          "% dos pixels caem mais de 0,3 por ano. Pixel de cerca de " + stats.modis_pixel_m + " m.</li>" +
-          "<li>NISAR, prévia HV: " + means +
-          ". Inclinação média " + stats.nisar_slope_per_day +
-          " por dia. São quatro meses, e cada imagem tem a própria escala. Pixel de cerca de " + stats.nisar_pixel_m + " m.</li>";
+          "<li>MODIS: mean trend is " + stats.modis_slope_per_year +
+          " color-scale units per year. " + stats.modis_falling_pct +
+          "% of pixels decline by more than 0.3 units per year. Pixel size is about " + stats.modis_pixel_m + " m.</li>" +
+          "<li>NISAR HV browse means: " + means +
+          ". Mean series slope is " + stats.nisar_slope_per_day +
+          " per day. This is a four-month series, and each browse image has its own scale. Pixel size is about " + stats.nisar_pixel_m + " m.</li>";
         buildSteps();
         apply(stats);
       });

@@ -3,28 +3,30 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Six municipalities — desertification check</title>
+    <title>Dryland monitoring prototype | TerraScope</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-      html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #10140f; color: #f6efe4; }
+      html, body { height: 100%; margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #182b27; color: #fbfaf6; }
       #map { position: absolute; inset: 0; }
       .panel {
         position: absolute; z-index: 500; top: 12px; left: 12px; width: min(320px, calc(100% - 24px));
         max-height: calc(100% - 24px); overflow: auto;
-        background: rgba(16, 20, 15, 0.92); border: 1px solid rgba(220, 64, 48, 0.7);
+        background: rgba(24, 43, 39, 0.95); border: 1px solid rgba(201, 223, 155, 0.48);
         border-radius: 14px; padding: 16px;
       }
       h1 { font-size: 1.05rem; margin: 0 0 4px; }
-      .where { font-size: 0.75rem; color: #c8b49a; margin: 0 0 10px; }
-      p { font-size: 0.8rem; line-height: 1.4; color: #e7d7c3; margin: 0 0 10px; }
+      .home-link { display: inline-block; margin-bottom: 10px; color: #c9df9b; font-size: 0.72rem; text-decoration: none; }
+      .home-link:hover { text-decoration: underline; }
+      .where { font-size: 0.75rem; color: #c9df9b; margin: 0 0 10px; }
+      p { font-size: 0.8rem; line-height: 1.4; color: #d7dfd8; margin: 0 0 10px; }
       button {
         display: block; width: 100%; text-align: left; margin: 0 0 6px; padding: 7px 8px;
-        background: transparent; color: #f6efe4; border: 1px solid rgba(220, 64, 48, 0.45);
+        background: transparent; color: #fbfaf6; border: 1px solid rgba(201, 223, 155, 0.4);
         border-radius: 8px; cursor: pointer; font: inherit; font-size: 0.78rem;
       }
-      button.active, button:hover { background: rgba(220, 64, 48, 0.25); }
-      button.muni { border-color: rgba(240, 214, 160, 0.7); }
-      h2 { font-size: 0.78rem; margin: 12px 0 6px; color: #f0d6a0; font-weight: 600; }
+      button.active, button:hover { background: rgba(212, 122, 78, 0.3); }
+      button.muni { border-color: rgba(201, 223, 155, 0.55); }
+      h2 { font-size: 0.78rem; margin: 12px 0 6px; color: #c9df9b; font-weight: 600; }
       table { width: 100%; border-collapse: collapse; font-size: 0.7rem; margin: 0 0 8px; }
       th, td { text-align: left; padding: 3px 2px; border-bottom: 1px solid rgba(255,255,255,0.1); }
       #watch p { margin-bottom: 6px; }
@@ -33,14 +35,15 @@
   <body>
     <div id="map"></div>
     <aside class="panel">
-      <h1>Six municipalities</h1>
-      <p class="where">Cabrobó desertification nucleus, Pernambuco</p>
-      <p>The rose area is the Cabrobó nucleus: Belém de São Francisco, Cabrobó, Carnaubeira da Penha, Floresta, and Itacuruba. That is the desertification area studies still use, including a 2023 land-use study and a 2024 vulnerability study. The 1992 world atlas is not shown. The six municipalities around Petrolina sit outside this nucleus. Red squares are our ten-year decline where the 2026 NISAR pass also sees a loss.</p>
-      <h2>NISAR, 17 Sep to 11 Oct 2026</h2>
+      <a class="home-link" href="index.html">← TerraScope</a>
+      <h1>Dryland monitoring prototype</h1>
+      <p class="where">Caatinga region · Pernambuco, Brazil</p>
+      <p>The outlined area marks the Cabrobó desertification nucleus, including Belém de São Francisco, Cabrobó, Carnaubeira da Penha, Floresta, and Itacuruba. The map also shows municipalities around Petrolina. Red squares mark candidate overlap between a long-term MODIS decline and a 2026 NISAR browse signal. Use these as screening locations for closer assessment—not as verified desertification or a food-vulnerability score.</p>
+      <h2>NISAR browse comparison · 17 Sep–11 Oct 2026</h2>
       <div id="watch"></div>
-      <h2>Municipalities</h2>
+      <h2>Study municipalities</h2>
       <div id="munis"></div>
-      <h2>Red squares</h2>
+      <h2>Candidate locations</h2>
       <div id="sites"></div>
     </aside>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -71,7 +74,7 @@
         fetch("desert/red.geojson").then((r) => r.json()),
       ]).then(([nucleus, munis, red]) => {
         const nucleusGroup = L.geoJSON(nucleus, {
-          style: { color: "#c45c7a", weight: 2, fillColor: "#c45c7a", fillOpacity: 0.35 },
+          style: { color: "#c9df9b", weight: 2, fillColor: "#c9df9b", fillOpacity: 0.25 },
           onEachFeature: (feature, layer) => {
             layer.bindTooltip(`${feature.properties.name} · Cabrobó desertification nucleus`);
           },
@@ -99,7 +102,7 @@
         });
 
         L.geoJSON(red, {
-          style: { color: "#ff5a45", weight: 2, fillColor: "#dc4030", fillOpacity: 0.45 },
+          style: { color: "#e18b60", weight: 2, fillColor: "#d47a4e", fillOpacity: 0.45 },
           onEachFeature: (feature, layer) => {
             const id = feature.properties.id;
             layers[id] = layer;
